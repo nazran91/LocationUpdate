@@ -7,8 +7,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -68,7 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -367,10 +369,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void updateLocationUI() {
         if (mCurrentLocation != null) {
-            // Add a marker in Sydney and move the camera
-            LatLng sydney = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(sydney).title("You are here"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            Log.e(TAG, mCurrentLocation.getLatitude() + " " + mCurrentLocation.getLongitude());
+            LatLng yourPosition = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+            mMap.clear();
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(yourPosition)
+                    .snippet("I am here")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                    .title("WoW"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(yourPosition, 15));
         }
     }
 
